@@ -12,7 +12,7 @@ public class MissingDatabaseCredentialsFailureAnalyzer
         extends AbstractFailureAnalyzer<MissingDatabaseCredentialsException> {
 
     @Override
-    protected FailureAnalysis analyze(@NonNull Throwable rootFailure, @NonNull MissingDatabaseCredentialsException cause) {
+    protected FailureAnalysis analyze(@NonNull Throwable rootFailure, MissingDatabaseCredentialsException cause) {
         return new FailureAnalysis(
                 "Falta la contraseña de la base de datos: no hay DB_PASSWORD en catalog-service/.env"
                         + " ni en las variables de entorno.",

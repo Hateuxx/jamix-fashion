@@ -62,7 +62,8 @@ public class UserService {
     public List<UserResponse> team() {
         return users.findAll().stream()
                 .sorted(Comparator.comparing((AppUser u) -> u.getRole().ordinal()).reversed()
-                        .thenComparing(AppUser::getDisplayName, String.CASE_INSENSITIVE_ORDER))
+                        .thenComparing(u -> u.getDisplayName() == null ? "" : u.getDisplayName(),
+                                String.CASE_INSENSITIVE_ORDER))
                 .map(UserResponse::from)
                 .toList();
     }

@@ -3,6 +3,7 @@ package pe.jamix.catalog.user;
 import java.util.List;
 import java.util.Locale;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -28,13 +29,13 @@ public class AppUserDetailsService implements UserDetailsService {
         return username == null ? "" : username.trim().toLowerCase(Locale.ROOT);
     }
 
-    public static List<GrantedAuthority> authoritiesFor(AppUser user) {
+    public static List<@NonNull GrantedAuthority> authoritiesFor(AppUser user) {
         String authority = user.isMustChangePassword() ? PASSWORD_CHANGE_REQUIRED : user.getRole().authority();
         return List.of(new SimpleGrantedAuthority(authority));
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
+    public @NonNull UserDetails loadUserByUsername(@NonNull String username) {
         AppUser user = users.findByUsername(normalize(username))
                 .orElseThrow(() -> new UsernameNotFoundException("Unknown user"));
         return User.withUsername(user.getUsername())

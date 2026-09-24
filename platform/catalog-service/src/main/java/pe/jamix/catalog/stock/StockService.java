@@ -1,6 +1,7 @@
 package pe.jamix.catalog.stock;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.Max;
@@ -108,10 +109,15 @@ public class StockService {
 
     /** Movement types with whether the current role may register them (drives the admin UI). */
     public List<MovementTypeInfo> typesFor(Role role) {
-        return java.util.Arrays.stream(MovementType.values())
-                .filter(MovementType::isManual)
-                .map(t -> new MovementTypeInfo(t.name(), t.label(), t.sign(), t.allowedFor(role)))
-                .toList();
+        // A plain loop: enum constants are never null, so a stream with a method reference (or a null
+        // check inside a lambda) only adds noise for the null-analysis in the IDE.
+        List<MovementTypeInfo> types = new ArrayList<>();
+        for (MovementType type : MovementType.values()) {
+            if (type.isManual()) {
+                types.add(new MovementTypeInfo(type.name(), type.label(), type.sign(), type.allowedFor(role)));
+            }
+        }
+        return types;
     }
 
     private static int clamp(int limit) {

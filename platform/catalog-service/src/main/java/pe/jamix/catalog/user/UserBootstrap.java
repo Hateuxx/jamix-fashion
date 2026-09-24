@@ -2,6 +2,7 @@ package pe.jamix.catalog.user;
 
 import java.time.Instant;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -35,7 +36,7 @@ public class UserBootstrap implements ApplicationRunner {
 
     @Override
     @Transactional
-    public void run(ApplicationArguments args) {
+    public void run(@NonNull ApplicationArguments args) {
         if (users.count() > 0) {
             return;
         }
