@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "../../shared/jamix-theme.css";
+
+/* The page behind an open quick view or bag panel shouldn't scroll. */
+body:has(dialog[open]) {
+  overflow: hidden;
+}

@@ -1,0 +1,58 @@
+# Render Blueprint: Render → New → Blueprint → pick this repo. Creates the two backend services.
+# Values marked `sync: false` are asked for in the Render dashboard (never commit secrets here).
+# The front ends (React store, Vue admin) go to Vercel; the MySQL database to Aiven (see DEPLOY.md).
+services:
+  - type: web
+    name: jamix-catalog
+    runtime: docker
+    rootDir: platform/catalog-service
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /api/v1/products
+    envVars:
+      # MySQL (e.g. Aiven free tier): jdbc:mysql://HOST:PORT/jamix_fashion?sslMode=REQUIRED&connectionTimeZone=UTC&characterEncoding=UTF-8
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      # Only needed if Flyway uses a different account than the app; otherwise leave both unset.
+      - key: DB_MIGRATION_USERNAME
+        sync: false
+      - key: DB_MIGRATION_PASSWORD
+        sync: false
+      - key: JAMIX_JWT_SECRET
+        generateValue: true
+      # First owner account ("admin"); change it from the panel after the first login.
+      - key: JAMIX_ADMIN_PASSWORD
+        sync: false
+      - key: JAMIX_CUSTOMER_PASSWORD
+        sync: false
+      # Public URLs, filled in once Vercel and Render have assigned them.
+      - key: JAMIX_CORS_ORIGINS
+        sync: false
+      - key: JAMIX_SITE_URL
+        sync: false
+      - key: JAMIX_SHOP_URL
+        sync: false
+      - key: JAMIX_LEADS_URL
+        sync: false
+
+  - type: web
+    name: jamix-leads
+    runtime: node
+    rootDir: platform/leads-bff
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: TRUST_PROXY
+        value: "1"
+      - key: SITE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false

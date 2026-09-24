@@ -1,0 +1,11 @@
+# Profile "h2": in-memory database in MySQL compatibility mode. Used by the tests and by
+# `npm run dev:h2` to try the app without installing MySQL. Data is lost on every restart.
+# Flyway runs the very same migrations as on MySQL, so they are exercised on every test run.
+spring:
+  datasource:
+    url: jdbc:h2:mem:jamix;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+  flyway:
+    user: sa
+    password: ""

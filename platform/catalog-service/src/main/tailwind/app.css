@@ -1,0 +1,5 @@
+/* Source for src/main/resources/static/css/app.css. Rebuild with `npm run build:css`. */
+@import "tailwindcss" source(none);
+@import "../../../../shared/jamix-theme.css";
+
+@source "../resources/templates";

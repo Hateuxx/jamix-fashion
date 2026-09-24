@@ -1,0 +1,69 @@
+/*
+ * Jamix design tokens (Tailwind CSS v4), shared by every front end:
+ * the Thymeleaf SSR page, the React storefront and the Vue admin.
+ * Import it right after `@import "tailwindcss";`.
+ *
+ * Contrast note: jx-gold is decorative only (borders, icons, large display text).
+ * Use jx-gold-dark or jx-charcoal for body-size text.
+ */
+@theme {
+  --color-jx-white: #ffffff;
+  --color-jx-crudo: #f4ede1;
+  --color-jx-natural: #e7dac6;
+  --color-jx-beige: #ded0b6;
+  --color-jx-charcoal: #322b23;
+  --color-jx-charcoal-soft: #4a4038;
+  --color-jx-gold: #b08d57;
+  --color-jx-gold-dark: #8f6f3f;
+  --color-jx-muted: #6f6556;
+  --color-jx-whatsapp: #1f8f4e;
+
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+
+  --animate-fade-in: fade-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Card lift on hover/focus. Motion is dropped for people who ask for less of it. */
+@utility hover-lift {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease;
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 40px -18px rgb(50 43 35 / 0.35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: box-shadow 0.3s ease;
+
+    &:hover,
+    &:focus-within {
+      transform: none;
+    }
+  }
+}
+
+/* Staggers the fade-in of direct children without inline styles (the SSR page has a strict CSP). */
+@utility stagger-children {
+  & > :nth-child(2) { animation-delay: 60ms; }
+  & > :nth-child(3) { animation-delay: 120ms; }
+  & > :nth-child(4) { animation-delay: 180ms; }
+  & > :nth-child(5) { animation-delay: 240ms; }
+  & > :nth-child(6) { animation-delay: 300ms; }
+  & > :nth-child(7) { animation-delay: 360ms; }
+  & > :nth-child(n + 8) { animation-delay: 420ms; }
+}

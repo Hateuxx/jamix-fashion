@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: catalog-service
+  config:
+    # Local secrets live in catalog-service/.env (git-ignored; copy .env.example). Real environment
+    # variables (CI, servers, containers) take precedence over the file.
+    import: optional:file:.env[.properties]
+
+  datasource:
+    # MySQL. sslMode=REQUIRED: the driver refuses to talk to the server without TLS.
+    url: ${DB_URL:jdbc:mysql://localhost:3306/jamix_fashion?sslMode=REQUIRED&connectionTimeZone=UTC&characterEncoding=UTF-8}
+    username: ${DB_USERNAME:jamix_app}
+    # No default on purpose: without DB_PASSWORD the app fails fast instead of trying an empty password.
+    password: ${DB_PASSWORD}
+    hikari:
+      pool-name: jamix-catalog
+      maximum-pool-size: 10
+
+  flyway:
+    # Migrations may run with a stronger account (DDL) than the app itself (DML only).
+    # If DB_MIGRATION_* aren't set, Flyway reuses the application account.
+    user: ${DB_MIGRATION_USERNAME:${spring.datasource.username}}
+    password: ${DB_MIGRATION_PASSWORD:${spring.datasource.password}}
+    locations: classpath:db/migration
+
+  jpa:
+    hibernate:
+      # Flyway owns the schema; Hibernate only checks that entities and tables agree.
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        type:
+          # Instant columns are DATETIME(6) holding UTC, identical on MySQL and on H2 in tests.
+          preferred_instant_jdbc_type: TIMESTAMP
+
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: ${PORT:8080}
+  # Honour X-Forwarded-* from the gateway so redirects and links use the public host.
+  forward-headers-strategy: framework
+  compression:
+    enabled: true
+
+jamix:
+  security:
+    jwt:
+      # Must be >= 32 bytes. Override with JAMIX_JWT_SECRET outside local development.
+      secret: ${JAMIX_JWT_SECRET:dev-only-secret-change-me-before-deploying-0000}
+      issuer: jamix-catalog
+      ttl: 2h
+    # Only used to create the FIRST accounts when the app_users table is empty (UserBootstrap).
+    # After that, the owner manages the team (and passwords) from the admin panel.
+    users:
+      - username: admin
+        password: ${JAMIX_ADMIN_PASSWORD:admin123}
+        roles: [OWNER]
+      - username: cliente
+        password: ${JAMIX_CUSTOMER_PASSWORD:cliente123}
+        roles: [CUSTOMER]
+  cors:
+    # React storefront and Vue admin dev servers. The gateway makes these same-origin in production.
+    allowed-origins: ${JAMIX_CORS_ORIGINS:http://localhost:5173,http://localhost:5174}
+  storefront:
+    whatsapp-number: "51912452389"
+    leads-endpoint: ${JAMIX_LEADS_URL:http://localhost:4000/api/leads}
+    site-url: ${JAMIX_SITE_URL:http://localhost:8080}
+    # Interactive React store. Behind the gateway in production this is /tienda/.
+    shop-url: ${JAMIX_SHOP_URL:http://localhost:5173}

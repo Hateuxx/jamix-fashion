@@ -1,0 +1,17 @@
+{
+  "name": "jamix-catalog-service",
+  "private": true,
+  "description": "Spring Boot catalog service. npm is only a convenience wrapper around mvnw plus the Tailwind build",
+  "scripts": {
+    "dev": "node scripts/mvnw.mjs spring-boot:run",
+    "dev:h2": "node scripts/mvnw.mjs spring-boot:run -Dspring-boot.run.profiles=h2",
+    "test": "node scripts/mvnw.mjs test",
+    "build": "node scripts/mvnw.mjs package",
+    "build:css": "tailwindcss -i src/main/tailwind/app.css -o src/main/resources/static/css/app.css --minify",
+    "watch:css": "tailwindcss -i src/main/tailwind/app.css -o src/main/resources/static/css/app.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

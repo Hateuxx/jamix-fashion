@@ -1,0 +1,12 @@
+# Keep the build context small and secrets out of the image.
+target/
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+hs_err_pid*
+replay_pid*
+db/*.local.sql
+.idea/
+.vscode/

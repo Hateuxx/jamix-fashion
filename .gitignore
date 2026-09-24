@@ -1,0 +1,90 @@
+# =====================================================================
+#  Jamix Fashion: Spring Boot (Maven) + Node/Express + React/Vue (Vite)
+# =====================================================================
+
+# ---------- Secrets & local configuration (NEVER commit) --------------
+.env
+.env.*
+!.env.example
+*.local
+*.local.sql
+application-local.yml
+application-local.properties
+# Keys and certificates
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+# Database dumps / backups (may contain customer data)
+*.dump
+*.sql.gz
+*.bak
+/backups/
+
+# ---------- Java / Maven ----------------------------------------------
+target/
+*.class
+*.jar
+*.war
+!.mvn/wrapper/maven-wrapper.jar
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+# Spring Boot / H2 local files
+HELP.md
+*.mv.db
+*.trace.db
+spring-shell.log
+
+# ---------- Deploy tooling (local project links, may hold account ids) --
+.vercel/
+.render/
+.fly/
+
+# ---------- Node / Vite -----------------------------------------------
+node_modules/
+dist/
+dist-ssr/
+.vite/
+coverage/
+.npm/
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------- Logs & temp -----------------------------------------------
+logs/
+*.log
+*.tmp
+*.swp
+*~
+
+# ---------- IDEs ------------------------------------------------------
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.classpath
+.project
+.settings/
+.factorypath
+bin/
+out/
+.sts4-cache/
+.apt_generated/
+
+# ---------- Operating systems -----------------------------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/

@@ -1,0 +1,18 @@
+# Normalize line endings: LF in the repository, native on checkout.
+* text=auto eol=lf
+
+# Windows scripts need CRLF; Unix scripts must stay LF or they fail on Linux/macOS/CI.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+mvnw  text eol=lf
+
+# Binary files: never touch them.
+*.jpg   binary
+*.jpeg  binary
+*.png   binary
+*.webp  binary
+*.ico   binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary
+*.jar   binary

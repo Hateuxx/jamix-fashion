@@ -1,0 +1,15 @@
+{
+  "name": "jamix-platform",
+  "private": true,
+  "description": "Runs the whole Jamix platform locally: npm run setup, then npm run dev",
+  "engines": {
+    "node": ">=22.9"
+  },
+  "scripts": {
+    "setup": "node scripts/run-all.mjs install",
+    "dev": "node scripts/run-all.mjs dev",
+    "dev:h2": "node scripts/run-all.mjs dev --h2",
+    "test": "node scripts/run-all.mjs test",
+    "build": "node scripts/run-all.mjs build"
+  }
+}

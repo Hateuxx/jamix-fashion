@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es-PE" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jamix Fashion · Ropa blanca para sesiones de fotos en Lima</title>
+  <meta name="description"
+        content="Ropa blanca para bautizos, baby showers, gender reveals y books familiares en San Juan de Lurigancho, Lima. Toda la familia de blanco, en la misma foto.">
+  <link rel="canonical" th:href="${canonicalUrl}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Jamix Fashion · Toda la familia de blanco, en la misma foto">
+  <meta property="og:description" content="No vendemos una prenda. Vestimos el recuerdo que va a quedar colgado en tu sala.">
+  <meta property="og:url" th:content="${canonicalUrl}">
+  <meta property="og:image" th:content="@{/img/hero.jpg}">
+  <meta name="theme-color" content="#f4ede1">
+  <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="preload" as="image" th:href="@{/img/hero.jpg}" fetchpriority="high">
+
+  <script type="application/ld+json" th:utext="${jsonLd}"></script>
+</head>
+<body class="bg-jx-white font-sans text-jx-charcoal antialiased">
+
+<a href="#catalogo"
+   class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-jx-charcoal focus:px-4 focus:py-2 focus:text-jx-white">
+  Saltar al catálogo
+</a>
+
+<!-- ============ NAV ============ -->
+<header class="sticky top-0 z-40 border-b border-jx-natural/70 bg-jx-white/90 backdrop-blur">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6" aria-label="Principal">
+    <a href="/" class="flex items-baseline gap-1.5">
+      <span class="font-display text-2xl font-bold tracking-tight">Jamix</span>
+      <span class="text-[0.65rem] font-medium tracking-[0.35em] text-jx-gold-dark">FASHION</span>
+    </a>
+    <ul class="hidden items-center gap-8 text-sm font-medium md:flex">
+      <li><a class="transition-colors hover:text-jx-gold-dark" href="#catalogo">Catálogo</a></li>
+      <li><a class="transition-colors hover:text-jx-gold-dark" href="#mayorista">Mayorista</a></li>
+      <li><a class="transition-colors hover:text-jx-gold-dark" href="#contacto">Contacto</a></li>
+    </ul>
+    <a class="rounded-full bg-jx-charcoal px-4 py-2 text-sm font-medium text-jx-white transition-colors hover:bg-jx-charcoal-soft"
+       th:href="@{https://wa.me/{n}(n=${whatsappNumber},text='Hola Jamix Fashion, quiero consultar por una prenda')}"
+       target="_blank" rel="noopener">
+      <span class="sm:hidden">WhatsApp</span><span class="hidden sm:inline">Comprar por WhatsApp</span>
+    </a>
+  </nav>
+</header>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section id="inicio" class="relative isolate flex min-h-[88svh] items-end overflow-hidden bg-jx-charcoal">
+    <img th:src="@{/img/hero.jpg}" alt="" fetchpriority="high" decoding="async"
+         class="absolute inset-0 -z-10 h-full w-full object-cover object-center opacity-80">
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-jx-charcoal via-jx-charcoal/45 to-transparent"></div>
+
+    <div class="mx-auto w-full max-w-7xl px-4 pb-16 pt-32 sm:px-6 md:pb-24">
+      <div class="max-w-2xl text-jx-white motion-safe:animate-fade-in">
+        <p class="mb-4 text-xs font-medium uppercase tracking-[0.3em] text-jx-beige">
+          Ropa blanca para sesiones de fotos · Lima
+        </p>
+        <h1 class="font-display text-4xl font-semibold leading-[1.1] sm:text-5xl lg:text-6xl">
+          Toda la familia de blanco, <span class="italic text-jx-beige">en la misma foto.</span>
+        </h1>
+        <blockquote class="mt-6 max-w-xl border-l-2 border-jx-gold pl-4 text-lg font-light leading-relaxed text-jx-crudo sm:text-xl">
+          No vendemos una prenda. Vestimos el recuerdo que va a quedar colgado en tu sala.
+        </blockquote>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a th:href="${shopUrl}" href="#catalogo"
+             class="rounded-full bg-jx-white px-6 py-3 text-sm font-semibold text-jx-charcoal transition hover:bg-jx-crudo">
+            Arma el look de tu familia
+          </a>
+          <a href="#contacto"
+             class="rounded-full border border-jx-white/70 px-6 py-3 text-sm font-semibold text-jx-white transition hover:bg-jx-white/10">
+            Cuéntanos tu evento
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATÁLOGO (SSR, indexable) ============ -->
+  <section id="catalogo" class="bg-jx-crudo py-20 sm:py-24" aria-labelledby="catalogo-title">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-jx-gold-dark">Colección permanente</p>
+          <h2 id="catalogo-title" class="mt-2 font-display text-3xl font-semibold sm:text-4xl">Elige por quién vas a vestir</h2>
+          <p class="mt-3 text-sm text-jx-charcoal-soft">
+            ¿Vistes a toda la familia?
+            <a th:href="${shopUrl}" href="#" class="font-semibold text-jx-gold-dark underline underline-offset-4 hover:text-jx-charcoal">
+              Arma el look completo y envíalo en un solo WhatsApp →</a>
+          </p>
+        </div>
+
+        <!-- Plain links: filtering works without JavaScript and every view is crawlable. -->
+        <nav aria-label="Filtrar por categoría" class="flex flex-wrap gap-2">
+          <a th:href="@{/#catalogo}" href="/#catalogo"
+             th:attr="aria-current=${activeCategory == null} ? 'page' : null"
+             th:classappend="${activeCategory == null} ? 'bg-jx-charcoal text-jx-white border-jx-charcoal' : 'bg-jx-white text-jx-charcoal border-jx-natural hover:border-jx-charcoal'"
+             class="rounded-full border px-5 py-2 text-sm font-medium transition-colors">Todo</a>
+          <a th:each="c : ${categories}"
+             th:href="@{/#catalogo(categoria=${c.slug()})}"
+             th:text="${c.label()}"
+             th:attr="aria-current=${activeCategory == c.slug()} ? 'page' : null"
+             th:classappend="${activeCategory == c.slug()} ? 'bg-jx-charcoal text-jx-white border-jx-charcoal' : 'bg-jx-white text-jx-charcoal border-jx-natural hover:border-jx-charcoal'"
+             class="rounded-full border px-5 py-2 text-sm font-medium transition-colors">Ella</a>
+        </nav>
+      </div>
+
+      <p th:if="${#lists.isEmpty(products)}" class="mt-12 text-jx-muted">
+        Aún no hay prendas en esta categoría. Escríbenos y te contamos qué llega esta semana.
+      </p>
+
+      <ul class="stagger-children mt-12 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4" th:unless="${#lists.isEmpty(products)}">
+        <li th:each="p : ${products}"
+            class="hover-lift flex flex-col overflow-hidden rounded-2xl bg-jx-white motion-safe:animate-fade-in">
+          <article class="flex h-full flex-col" th:attr="aria-labelledby='p-' + ${p.slug()}">
+            <div class="relative aspect-[3/4] overflow-hidden bg-jx-natural">
+              <img th:if="${p.imageUrl() != null}" th:src="@{${p.imageUrl()}}" th:alt="${p.name()}"
+                   loading="lazy" decoding="async" class="h-full w-full object-cover">
+              <div th:if="${p.imageUrl() == null}"
+                   class="flex h-full items-center justify-center p-4 text-center font-display text-lg text-jx-charcoal-soft">
+                Foto próximamente
+              </div>
+              <span class="absolute left-3 top-3 rounded-full bg-jx-white/90 px-3 py-1 text-xs font-medium"
+                    th:text="${p.categoryLabel()}">Ella</span>
+              <span th:unless="${p.inStock()}"
+                    class="absolute right-3 top-3 rounded-full bg-jx-charcoal px-3 py-1 text-xs font-medium text-jx-white">Agotado</span>
+            </div>
+            <div class="flex flex-1 flex-col gap-1 p-4 sm:p-5">
+              <p th:if="${p.type() != null}" class="text-[0.7rem] font-medium uppercase tracking-wider text-jx-gold-dark"
+                 th:text="${p.type()}">Vestidos largos</p>
+              <h3 th:id="'p-' + ${p.slug()}" class="font-display text-lg font-semibold leading-tight"
+                  th:text="${p.name()}">Vestido Rita</h3>
+              <p class="text-base font-semibold" th:text="${p.priceLabel()}">S/ 45</p>
+              <p th:if="${p.wholesaleLabel() != null}" class="mb-3 text-xs text-jx-muted"
+                 th:text="|Mayorista ${p.wholesaleLabel()} · desde ${p.wholesaleMinUnits()} unid.|">
+                Mayorista S/ 33 · desde 6 unid.
+              </p>
+              <a th:if="${p.inStock()}"
+                 th:href="@{https://wa.me/{n}(n=${whatsappNumber},text=${'Hola Jamix Fashion, quiero pedir: ' + p.name() + ' (' + p.priceLabel() + ')'})}"
+                 target="_blank" rel="noopener"
+                 class="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-jx-charcoal px-4 py-2.5 text-sm font-medium text-jx-white transition-colors hover:bg-jx-charcoal-soft">
+                Pedir por WhatsApp
+              </a>
+              <a th:unless="${p.inStock()}"
+                 th:href="@{https://wa.me/{n}(n=${whatsappNumber},text=${'Hola Jamix Fashion, ¿cuándo vuelve ' + p.name() + '?'})}"
+                 target="_blank" rel="noopener"
+                 class="mt-auto inline-flex items-center justify-center rounded-full border border-jx-charcoal px-4 py-2.5 text-sm font-medium transition-colors hover:bg-jx-crudo">
+                Avísame cuando vuelva
+              </a>
+            </div>
+          </article>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ MAYORISTA ============ -->
+  <section id="mayorista" class="px-4 py-20 sm:px-6 sm:py-24" aria-labelledby="mayorista-title">
+    <div class="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-jx-charcoal px-6 py-14 text-jx-white sm:px-12 md:py-16">
+      <div class="absolute -right-24 -top-24 h-72 w-72 rounded-full border border-jx-gold/30" aria-hidden="true"></div>
+      <div class="absolute -right-8 -top-8 h-40 w-40 rounded-full border border-jx-gold/30" aria-hidden="true"></div>
+
+      <div class="relative grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-center">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-jx-beige">Venta al por mayor</p>
+          <h2 id="mayorista-title" class="mt-3 font-display text-3xl font-semibold leading-tight sm:text-4xl">
+            Precio mayorista desde <span class="text-jx-gold">6 unidades</span>
+          </h2>
+          <p class="mt-4 max-w-lg text-jx-crudo/90">
+            Para fotógrafos, estudios y revendedoras. Combina modelos y tallas; el precio se aplica por prenda.
+          </p>
+        </div>
+        <div class="flex flex-col gap-6 rounded-2xl border border-jx-white/15 bg-jx-white/5 p-6 sm:p-8">
+          <div class="flex items-baseline gap-3">
+            <span class="text-sm text-jx-beige">Desde</span>
+            <span class="font-display text-5xl font-semibold">S/ 16</span>
+            <span class="text-sm text-jx-beige">hasta S/ 40</span>
+          </div>
+          <a th:href="@{https://wa.me/{n}(n=${whatsappNumber},text='Hola Jamix Fashion, quiero cotizar al por mayor (6+ unidades)')}"
+             target="_blank" rel="noopener"
+             class="inline-flex items-center justify-center rounded-full bg-jx-white px-6 py-3 text-sm font-semibold text-jx-charcoal transition hover:bg-jx-crudo">
+            Cotizar por mayor
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACTO (posts to the Node.js leads BFF) ============ -->
+  <section id="contacto" class="bg-jx-crudo py-20 sm:py-24" aria-labelledby="contacto-title">
+    <div class="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-jx-gold-dark">Asesoría incluida</p>
+        <h2 id="contacto-title" class="mt-3 font-display text-3xl font-semibold leading-tight sm:text-4xl">
+          Cuéntanos el evento y te armamos el outfit
+        </h2>
+        <p class="mt-4 max-w-md text-jx-charcoal-soft">
+          Bautizo, baby shower, gender reveal o book familiar: dinos cuántos van a salir en la foto y te respondemos
+          por WhatsApp con el conjunto completo y el total.
+        </p>
+      </div>
+
+      <form th:action="${leadsEndpoint}" method="post"
+            class="grid gap-5 rounded-3xl bg-jx-white p-6 shadow-sm sm:grid-cols-2 sm:p-8">
+        <div th:if="${leadStatus == 'error'}" role="alert"
+             class="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800 sm:col-span-2">
+          Revisa tu nombre y el tipo de evento e inténtalo de nuevo.
+        </div>
+
+        <!-- Honeypot: invisible to people, bots tend to fill it in. -->
+        <div class="hidden" aria-hidden="true">
+          <label>No llenar <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <label class="flex flex-col gap-1.5 text-sm font-medium sm:col-span-2">
+          Tu nombre
+          <input name="name" required minlength="2" maxlength="80" autocomplete="name"
+                 class="rounded-xl border border-jx-natural px-4 py-3 font-normal outline-none transition focus:border-jx-charcoal focus:ring-2 focus:ring-jx-beige">
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium">
+          <span>WhatsApp <span class="font-normal text-jx-muted">(opcional)</span></span>
+          <input name="phone" type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="9XX XXX XXX"
+                 class="rounded-xl border border-jx-natural px-4 py-3 font-normal outline-none transition focus:border-jx-charcoal focus:ring-2 focus:ring-jx-beige">
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium">
+          Tipo de evento
+          <select name="eventType" required
+                  class="rounded-xl border border-jx-natural bg-jx-white px-4 py-3 font-normal outline-none transition focus:border-jx-charcoal focus:ring-2 focus:ring-jx-beige">
+            <option value="">Elige uno</option>
+            <option value="bautizo">Bautizo</option>
+            <option value="baby-shower">Baby shower</option>
+            <option value="gender-reveal">Gender reveal</option>
+            <option value="book-familiar">Book familiar</option>
+            <option value="otro">Otro</option>
+          </select>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium">
+          Fecha del evento
+          <input name="eventDate" type="date"
+                 class="rounded-xl border border-jx-natural px-4 py-3 font-normal outline-none transition focus:border-jx-charcoal focus:ring-2 focus:ring-jx-beige">
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium">
+          ¿Cuántas personas?
+          <input name="people" type="number" min="1" max="30" inputmode="numeric"
+                 class="rounded-xl border border-jx-natural px-4 py-3 font-normal outline-none transition focus:border-jx-charcoal focus:ring-2 focus:ring-jx-beige">
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium sm:col-span-2">
+          <span>Cuéntanos más <span class="font-normal text-jx-muted">(tallas, edades, lugar de la sesión…)</span></span>
+          <textarea name="message" rows="4" maxlength="1000"
+                    class="resize-y rounded-xl border border-jx-natural px-4 py-3 font-normal outline-none transition focus:border-jx-charcoal focus:ring-2 focus:ring-jx-beige"></textarea>
+        </label>
+        <button type="submit"
+                class="rounded-full bg-jx-charcoal px-6 py-3.5 text-sm font-semibold text-jx-white transition hover:bg-jx-charcoal-soft sm:col-span-2">
+          Enviar y continuar en WhatsApp
+        </button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="border-t border-jx-natural bg-jx-white">
+  <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-10 text-sm text-jx-muted sm:flex-row sm:justify-between sm:px-6">
+    <p>Jamix Fashion · San Juan de Lurigancho, Lima · Envíos a todo el Perú</p>
+    <p>WhatsApp <a class="font-medium text-jx-charcoal hover:underline" th:href="|https://wa.me/${whatsappNumber}|">+51 912 452 389</a></p>
+  </div>
+</footer>
+
+<!-- ============ WHATSAPP FLOTANTE ============ -->
+<a th:href="@{https://wa.me/{n}(n=${whatsappNumber},text='Hola Jamix Fashion, tengo una consulta')}"
+   target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp al +51 912 452 389"
+   class="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-jx-whatsapp text-jx-white shadow-lg transition hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-jx-charcoal motion-safe:animate-fade-in">
+  <svg viewBox="0 0 32 32" class="h-7 w-7" fill="currentColor" aria-hidden="true">
+    <path d="M16.04 3C8.86 3 3.03 8.82 3.03 16c0 2.3.6 4.54 1.74 6.52L3 29l6.64-1.74A12.94 12.94 0 0 0 16.04 29C23.2 29 29 23.18 29 16S23.2 3 16.04 3Zm0 23.67c-1.99 0-3.94-.53-5.64-1.54l-.4-.24-3.94 1.03 1.05-3.84-.26-.4A10.63 10.63 0 0 1 5.4 16c0-5.87 4.77-10.64 10.64-10.64 5.86 0 10.63 4.77 10.63 10.64 0 5.87-4.77 10.67-10.63 10.67Zm5.83-7.97c-.32-.16-1.89-.93-2.18-1.04-.3-.1-.51-.16-.73.16-.21.32-.83 1.04-1.02 1.26-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.1-.21.05-.4-.03-.56-.08-.16-.73-1.75-1-2.4-.26-.63-.53-.54-.73-.55h-.62c-.21 0-.56.08-.85.4-.3.32-1.12 1.1-1.12 2.67 0 1.57 1.15 3.1 1.31 3.31.16.21 2.26 3.45 5.47 4.84.77.33 1.36.53 1.83.68.77.24 1.47.21 2.02.13.62-.09 1.89-.77 2.16-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37Z"/>
+  </svg>
+</a>
+
+</body>
+</html>
