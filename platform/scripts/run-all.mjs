@@ -4,7 +4,7 @@
 //   node scripts/run-all.mjs test     -> runs every test suite (one after another)
 //   node scripts/run-all.mjs build    -> production builds (one after another)
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
 
@@ -192,6 +192,64 @@ if (catalogWillStart && !useH2 && !hasDbConfig) {
     ].join('\n'),
   );
   process.exit(1);
+}
+
+/** Host and port of MySQL from DB_URL (environment or catalog-service/.env); localhost:3306 by default. */
+function databaseAddress() {
+  let url = process.env.DB_URL;
+  if (!url && existsSync(`${root}/catalog-service/.env`)) {
+    const line = readFileSync(`${root}/catalog-service/.env`, 'utf8').split(/\r?\n/).find((l) => l.startsWith('DB_URL='));
+    url = line?.slice('DB_URL='.length).trim();
+  }
+  const match = /\/\/([^/:?]+)(?::(\d+))?/.exec(url || '');
+  return { host: match?.[1] ?? 'localhost', port: Number(match?.[2] ?? 3306) };
+}
+
+function canConnect(host, port) {
+  return new Promise((resolve) => {
+    const socket = net.connect({ host, port });
+    socket.setTimeout(2000);
+    socket.once('connect', () => { socket.destroy(); resolve(true); });
+    socket.once('timeout', () => { socket.destroy(); resolve(false); });
+    socket.once('error', () => resolve(false));
+  });
+}
+
+/** Names of installed MySQL services (Windows), to print the exact command to start one. */
+function mysqlServices() {
+  if (!isWindows) return [];
+  const out = spawnSync('sc', ['query', 'type=', 'service', 'state=', 'all'], { encoding: 'latin1' }).stdout ?? '';
+  // "SERVICE_NAME: MySQL80" (English) / "NOMBRE_DE_SERVICIO: MySQL80" (Spanish)...
+  return [...new Set([...out.matchAll(/^[A-Z_]+:\s*(\S*mysql\S*)\s*$/gim)].map((m) => m[1]))];
+}
+
+// MySQL must also be reachable. On Windows its service usually has manual start, so after a
+// reboot it's stopped and the catalog would die with a cryptic "Communications link failure".
+if (catalogWillStart && !useH2) {
+  const { host, port } = databaseAddress();
+  const local = ['localhost', '127.0.0.1', '::1'].includes(host);
+  const reachable = local ? await portInUse(port) : await canConnect(host, port);
+  if (!reachable) {
+    const services = local ? mysqlServices() : [];
+    const name = services[0] ?? '<servicio>';
+    console.error(
+      [
+        `${label(SERVICES[0])} MySQL no responde en ${host}:${port} (DB_URL de catalog-service/.env).`,
+        '',
+        ...(local
+          ? [
+              '  Su servicio de Windows suele tener inicio manual y queda detenido al reiniciar el PC:',
+              `    1. Abre PowerShell COMO ADMINISTRADOR y ejecuta:   net start ${name}`,
+              `    2. Para que arranque siempre: services.msc → ${name} → Tipo de inicio: Automático`,
+              ...(services.length === 0 ? ['       (no encontré el nombre del servicio: búscalo en services.msc)'] : []),
+            ]
+          : ['  Revisa el host y el puerto de DB_URL y que el servidor de base de datos esté en marcha.']),
+        '',
+        '  O prueba ya sin MySQL (datos en memoria):   npm run dev:h2',
+      ].join('\n'),
+    );
+    process.exit(1);
+  }
 }
 
 process.on('SIGINT', () => stopAll(0));

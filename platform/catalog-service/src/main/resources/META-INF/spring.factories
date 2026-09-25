@@ -1,2 +1,4 @@
 org.springframework.boot.EnvironmentPostProcessor=pe.jamix.catalog.config.DatabaseCredentialsCheck
-org.springframework.boot.diagnostics.FailureAnalyzer=pe.jamix.catalog.config.MissingDatabaseCredentialsFailureAnalyzer
+org.springframework.boot.diagnostics.FailureAnalyzer=\
+  pe.jamix.catalog.config.MissingDatabaseCredentialsFailureAnalyzer,\
+  pe.jamix.catalog.config.DatabaseConnectionFailureAnalyzer
