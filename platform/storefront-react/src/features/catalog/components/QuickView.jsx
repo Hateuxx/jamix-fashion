@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { MAX_QTY, defaultPerson, peopleFor, sizesFor, whatsAppUrl } from '../lib/bag.js';
-import { useBag } from '../hooks/useBag.jsx';
+import Photo from '../../../shared/Photo.jsx';
+import { useBagActions, useBagUi } from '../../bag/BagProvider.jsx';
+import { MAX_QTY, defaultPerson, peopleFor, sizesFor, whatsAppUrl } from '../../bag/lib/bag.js';
 
 /**
  * Product quick view: photo gallery + "para quién / talla / cantidad" + add to the family look.
@@ -9,9 +10,10 @@ import { useBag } from '../hooks/useBag.jsx';
  */
 export default function QuickView({ product, apiBaseUrl, whatsappNumber, onClose }) {
   const dialogRef = useRef(null);
-  const bag = useBag();
+  const { add } = useBagActions();
+  const { lastPerson } = useBagUi();
   const [photo, setPhoto] = useState(0);
-  const [person, setPerson] = useState(() => defaultPerson(product, bag.lastPerson));
+  const [person, setPerson] = useState(() => defaultPerson(product, lastPerson));
   const people = peopleFor(product);
   const [size, setSize] = useState('');
   const [qty, setQty] = useState(1);
@@ -34,7 +36,7 @@ export default function QuickView({ product, apiBaseUrl, whatsappNumber, onClose
 
   function submit(event) {
     event.preventDefault();
-    bag.add(product, { person, size, qty });
+    add(product, { person, size, qty });
     dialogRef.current?.close();
   }
 
@@ -55,9 +57,11 @@ export default function QuickView({ product, apiBaseUrl, whatsappNumber, onClose
         <div className="relative bg-jx-natural">
           <div className="aspect-[3/4]">
             {images.length > 0 ? (
-              <img
+              <Photo
                 key={images[photo]}
-                src={`${apiBaseUrl}${images[photo]}`}
+                imageUrl={images[photo]}
+                apiBaseUrl={apiBaseUrl}
+                sizes="(min-width: 768px) 28rem, 100vw"
                 alt={`${product.name}, foto ${photo + 1} de ${images.length}`}
                 className="h-full w-full object-cover motion-safe:animate-fade-in"
               />
@@ -78,7 +82,7 @@ export default function QuickView({ product, apiBaseUrl, whatsappNumber, onClose
                     i === photo ? 'border-jx-white' : 'border-transparent opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <img src={`${apiBaseUrl}${src}`} alt="" className="h-full w-full object-cover" />
+                  <Photo imageUrl={src} apiBaseUrl={apiBaseUrl} sizes="44px" className="h-full w-full object-cover" />
                 </button>
               ))}
             </div>

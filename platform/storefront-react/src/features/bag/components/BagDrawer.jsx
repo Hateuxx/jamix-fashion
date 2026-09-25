@@ -1,30 +1,32 @@
 import { useEffect, useRef } from 'react';
 
+import Photo from '../../../shared/Photo.jsx';
 import { UNSURE_SIZE, formatSoles, whatsAppMessage, whatsAppUrl } from '../lib/bag.js';
-import { useBag } from '../hooks/useBag.jsx';
+import { useBagActions, useBagContent, useBagUi } from '../BagProvider.jsx';
 
 /** Side panel with the family look, grouped by person, and the "send it all by WhatsApp" button. */
 export default function BagDrawer({ apiBaseUrl, whatsappNumber }) {
-  const bag = useBag();
+  const { open } = useBagUi();
+  const { summary } = useBagContent();
+  const { closeBag, clear, setQty, remove } = useBagActions();
   const dialogRef = useRef(null);
-  const { summary } = bag;
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
-    if (bag.open && !dialog.open) dialog.showModal();
-    if (!bag.open && dialog.open) dialog.close();
-  }, [bag.open]);
+    if (open && !dialog.open) dialog.showModal();
+    if (!open && dialog.open) dialog.close();
+  }, [open]);
 
   function clearBag() {
-    if (window.confirm('¿Vaciar todo el look?')) bag.clear();
+    if (window.confirm('¿Vaciar todo el look?')) clear();
   }
 
   return (
     <dialog
       ref={dialogRef}
       aria-labelledby="bag-title"
-      onClose={() => bag.setOpen(false)}
+      onClose={closeBag}
       onClick={(e) => e.target === dialogRef.current && dialogRef.current.close()}
       className="fixed inset-y-0 right-0 left-auto m-0 h-full max-h-none w-full max-w-md bg-jx-white p-0 text-jx-charcoal shadow-2xl backdrop:bg-jx-charcoal/50 open:motion-safe:animate-fade-in"
     >
@@ -34,7 +36,7 @@ export default function BagDrawer({ apiBaseUrl, whatsappNumber }) {
             <h2 id="bag-title" className="font-display text-2xl font-semibold">El look de tu familia</h2>
             <p className="text-sm text-jx-muted">{summary.units} {summary.units === 1 ? 'prenda' : 'prendas'}</p>
           </div>
-          <button type="button" onClick={() => bag.setOpen(false)} aria-label="Cerrar"
+          <button type="button" onClick={closeBag} aria-label="Cerrar"
             className="rounded-full p-2 text-2xl leading-none text-jx-muted hover:bg-jx-crudo hover:text-jx-charcoal">×</button>
         </header>
 
@@ -44,7 +46,7 @@ export default function BagDrawer({ apiBaseUrl, whatsappNumber }) {
             <p className="text-sm text-jx-muted">
               Abre una prenda, elige para quién es y su talla. Al final lo envías todo en un solo WhatsApp.
             </p>
-            <button type="button" onClick={() => bag.setOpen(false)}
+            <button type="button" onClick={closeBag}
               className="mt-2 rounded-full border border-jx-charcoal px-5 py-2 text-sm font-medium hover:bg-jx-crudo">
               Ver el catálogo
             </button>
@@ -59,7 +61,7 @@ export default function BagDrawer({ apiBaseUrl, whatsappNumber }) {
                     {lines.map((l) => (
                       <li key={l.key} className="flex gap-3">
                         <div className="h-20 w-16 shrink-0 overflow-hidden rounded-lg bg-jx-natural">
-                          {l.imageUrl && <img src={`${apiBaseUrl}${l.imageUrl}`} alt="" className="h-full w-full object-cover" />}
+                          {l.imageUrl && <Photo imageUrl={l.imageUrl} apiBaseUrl={apiBaseUrl} sizes="64px" className="h-full w-full object-cover" />}
                         </div>
                         <div className="flex flex-1 flex-col gap-1">
                           <div className="flex justify-between gap-2">
@@ -75,13 +77,13 @@ export default function BagDrawer({ apiBaseUrl, whatsappNumber }) {
                           </p>
                           <div className="mt-1 flex items-center gap-3">
                             <div className="flex items-center rounded-lg border border-jx-natural text-sm">
-                              <button type="button" onClick={() => bag.setQty(l.key, l.qty - 1)}
+                              <button type="button" onClick={() => setQty(l.key, l.qty - 1)}
                                 aria-label={`Quitar una unidad de ${l.name}`} className="px-2.5 py-1 hover:bg-jx-crudo">−</button>
                               <span className="w-7 text-center tabular-nums">{l.qty}</span>
-                              <button type="button" onClick={() => bag.setQty(l.key, l.qty + 1)}
+                              <button type="button" onClick={() => setQty(l.key, l.qty + 1)}
                                 aria-label={`Agregar una unidad de ${l.name}`} className="px-2.5 py-1 hover:bg-jx-crudo">+</button>
                             </div>
-                            <button type="button" onClick={() => bag.remove(l.key)}
+                            <button type="button" onClick={() => remove(l.key)}
                               className="text-xs text-jx-muted underline underline-offset-2 hover:text-jx-charcoal">Quitar</button>
                           </div>
                         </div>
