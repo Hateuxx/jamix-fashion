@@ -63,6 +63,13 @@ class CatalogApiIntegrationTest {
         mvc.perform(get("/api/v1/products/top-naty"))
                 .andExpect(jsonPath("$.gallery", hasSize(0)));
 
+        // V8 migration: September 2026 retail prices; wholesale prices unchanged.
+        mvc.perform(get("/api/v1/products/conjunto-andres"))
+                .andExpect(jsonPath("$.priceLabel").value("S/ 119"));
+        mvc.perform(get("/api/v1/products/vestido-rita"))
+                .andExpect(jsonPath("$.priceLabel").value("S/ 60"))
+                .andExpect(jsonPath("$.wholesaleLabel").value("S/ 33"));
+
         // V3 migration: description matches the new photo.
         mvc.perform(get("/api/v1/products/vestido-rita"))
                 .andExpect(jsonPath("$.description").value(containsString("mangas tres cuartos")))
