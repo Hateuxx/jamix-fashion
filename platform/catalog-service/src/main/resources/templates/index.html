@@ -41,7 +41,6 @@
     </a>
     <ul class="hidden items-center gap-8 text-sm font-medium md:flex">
       <li><a class="transition-colors hover:text-jx-gold-dark" href="#catalogo">Catálogo</a></li>
-      <li><a class="transition-colors hover:text-jx-gold-dark" href="#mayorista">Mayorista</a></li>
       <li><a class="transition-colors hover:text-jx-gold-dark" href="#contacto">Contacto</a></li>
     </ul>
     <a class="rounded-full bg-jx-charcoal px-4 py-2 text-sm font-medium text-jx-white transition-colors hover:bg-jx-charcoal-soft"
@@ -140,11 +139,7 @@
                  th:text="${p.type()}">Vestidos largos</p>
               <h3 th:id="'p-' + ${p.slug()}" class="font-display text-lg font-semibold leading-tight"
                   th:text="${p.name()}">Vestido Rita</h3>
-              <p class="text-base font-semibold" th:text="${p.priceLabel()}">S/ 45</p>
-              <p th:if="${p.wholesaleLabel() != null}" class="mb-3 text-xs text-jx-muted"
-                 th:text="|Mayorista ${p.wholesaleLabel()} · desde ${p.wholesaleMinUnits()} unid.|">
-                Mayorista S/ 33 · desde 6 unid.
-              </p>
+              <p class="mb-3 text-base font-semibold" th:text="${p.priceLabel()}">S/ 45</p>
               <a th:if="${p.inStock()}"
                  th:href="@{https://wa.me/{n}(n=${whatsappNumber},text=${'Hola Jamix Fashion, quiero pedir: ' + p.name() + ' (' + p.priceLabel() + ')'})}"
                  target="_blank" rel="noopener"
@@ -161,38 +156,6 @@
           </article>
         </li>
       </ul>
-    </div>
-  </section>
-
-  <!-- ============ MAYORISTA ============ -->
-  <section id="mayorista" class="px-4 py-20 sm:px-6 sm:py-24" aria-labelledby="mayorista-title">
-    <div class="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-jx-charcoal px-6 py-14 text-jx-white sm:px-12 md:py-16">
-      <div class="absolute -right-24 -top-24 h-72 w-72 rounded-full border border-jx-gold/30" aria-hidden="true"></div>
-      <div class="absolute -right-8 -top-8 h-40 w-40 rounded-full border border-jx-gold/30" aria-hidden="true"></div>
-
-      <div class="relative grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-center">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-jx-beige">Venta al por mayor</p>
-          <h2 id="mayorista-title" class="mt-3 font-display text-3xl font-semibold leading-tight sm:text-4xl">
-            Precio mayorista desde <span class="text-jx-gold">6 unidades</span>
-          </h2>
-          <p class="mt-4 max-w-lg text-jx-crudo/90">
-            Para fotógrafos, estudios y revendedoras. Combina modelos y tallas; el precio se aplica por prenda.
-          </p>
-        </div>
-        <div class="flex flex-col gap-6 rounded-2xl border border-jx-white/15 bg-jx-white/5 p-6 sm:p-8">
-          <div class="flex items-baseline gap-3">
-            <span class="text-sm text-jx-beige">Desde</span>
-            <span class="font-display text-5xl font-semibold">S/ 16</span>
-            <span class="text-sm text-jx-beige">hasta S/ 40</span>
-          </div>
-          <a th:href="@{https://wa.me/{n}(n=${whatsappNumber},text='Hola Jamix Fashion, quiero cotizar al por mayor (6+ unidades)')}"
-             target="_blank" rel="noopener"
-             class="inline-flex items-center justify-center rounded-full bg-jx-white px-6 py-3 text-sm font-semibold text-jx-charcoal transition hover:bg-jx-crudo">
-            Cotizar por mayor
-          </a>
-        </div>
-      </div>
     </div>
   </section>
 

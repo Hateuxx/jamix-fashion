@@ -17,7 +17,7 @@ import pe.jamix.catalog.product.ProductService;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
- * Server-rendered storefront: hero, indexable catalogue, wholesale banner and the lead form.
+ * Server-rendered storefront: hero, indexable catalogue and the lead form.
  * Filtering works through plain links (?categoria=ella) so crawlers and no-JS visitors get it too.
  */
 @Controller

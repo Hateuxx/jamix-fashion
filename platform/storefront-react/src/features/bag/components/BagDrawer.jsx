@@ -73,7 +73,6 @@ export default function BagDrawer({ apiBaseUrl, whatsappNumber }) {
                           </div>
                           <p className="text-xs text-jx-muted">
                             {l.size === UNSURE_SIZE ? 'Talla: asesórenme' : `Talla ${l.size}`}
-                            {l.wholesale && <span className="ml-2 rounded-full bg-jx-crudo px-2 py-0.5 text-jx-gold-dark">mayorista</span>}
                           </p>
                           <div className="mt-1 flex items-center gap-3">
                             <div className="flex items-center rounded-lg border border-jx-natural text-sm">
@@ -95,17 +94,6 @@ export default function BagDrawer({ apiBaseUrl, whatsappNumber }) {
             </div>
 
             <footer className="border-t border-jx-natural bg-jx-crudo/60 px-6 py-5">
-              {summary.nudges.map((n) => (
-                <p key={n.productId} className="mb-2 rounded-lg bg-jx-white px-3 py-2 text-xs">
-                  Agrega {n.missing} {n.missing === 1 ? 'unidad más' : 'unidades más'} de <strong>{n.name}</strong> y
-                  todas pasan a precio mayorista.
-                </p>
-              ))}
-              {summary.wholesaleNames.length > 0 && (
-                <p className="mb-2 text-xs text-jx-gold-dark">
-                  Precio mayorista aplicado: {summary.wholesaleNames.join(', ')}.
-                </p>
-              )}
               <div className="flex items-baseline justify-between">
                 <span className="text-sm">Total{summary.estimated ? ' estimado' : ''}</span>
                 <span className="font-display text-3xl font-semibold tabular-nums">{formatSoles(summary.total)}</span>

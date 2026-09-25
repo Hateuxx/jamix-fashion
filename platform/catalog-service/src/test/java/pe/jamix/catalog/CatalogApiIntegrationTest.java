@@ -50,7 +50,8 @@ class CatalogApiIntegrationTest {
                 .andExpect(jsonPath("$[0].slug").value("falda-bobo"))
                 .andExpect(jsonPath("$[0].type").value("Faldas"))
                 .andExpect(jsonPath("$[0].priceLabel").value("S/ 25"))
-                .andExpect(jsonPath("$[0].wholesaleLabel").value("S/ 18"))
+                // V9 migration: no wholesale prices any more.
+                .andExpect(jsonPath("$[0].wholesaleLabel").doesNotExist())
                 .andExpect(jsonPath("$[0].stock").doesNotExist())
                 // Grouped Ella -> Él -> Niños even though Niños products were seeded before most Ella ones.
                 .andExpect(jsonPath("$[26].category").value("el"))
@@ -63,12 +64,11 @@ class CatalogApiIntegrationTest {
         mvc.perform(get("/api/v1/products/top-naty"))
                 .andExpect(jsonPath("$.gallery", hasSize(0)));
 
-        // V8 migration: September 2026 retail prices; wholesale prices unchanged.
+        // V8 migration: September 2026 retail prices.
         mvc.perform(get("/api/v1/products/conjunto-andres"))
                 .andExpect(jsonPath("$.priceLabel").value("S/ 119"));
         mvc.perform(get("/api/v1/products/vestido-rita"))
-                .andExpect(jsonPath("$.priceLabel").value("S/ 60"))
-                .andExpect(jsonPath("$.wholesaleLabel").value("S/ 33"));
+                .andExpect(jsonPath("$.priceLabel").value("S/ 60"));
 
         // V3 migration: description matches the new photo.
         mvc.perform(get("/api/v1/products/vestido-rita"))
@@ -84,7 +84,7 @@ class CatalogApiIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(7)))
                 .andExpect(jsonPath("$[0].priceLabel").value("S/ 50 – 60"))
-                .andExpect(jsonPath("$[0].wholesaleLabel").value("S/ 32 – 36"));
+                .andExpect(jsonPath("$[0].wholesaleLabel").doesNotExist());
 
         mvc.perform(get("/api/v1/products").param("category", "mascotas"))
                 .andExpect(status().isNotFound())
@@ -136,9 +136,9 @@ class CatalogApiIntegrationTest {
     }
 
     @Test
-    void customerOrderMergesLinesAndAppliesWholesaleFromSixUnits() throws Exception {
+    void customerOrderMergesLinesAndChargesRetailPrice() throws Exception {
         String token = login("cliente", "cliente123");
-        // Vestido Rita (id 2): 3 + 3 units in separate lines = 6 -> wholesale S/ 33 each.
+        // Vestido Rita (id 2): 3 + 3 units in separate lines = 6, all at the retail S/ 60 (no wholesale).
         String created = mvc.perform(post("/api/v1/orders").header(HttpHeaders.AUTHORIZATION, bearer(token))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"items\":[{\"productId\":2,\"quantity\":3},{\"productId\":2,\"quantity\":3}]}"))
@@ -146,8 +146,8 @@ class CatalogApiIntegrationTest {
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(jsonPath("$.lines", hasSize(1)))
                 .andExpect(jsonPath("$.lines[0].quantity").value(6))
-                .andExpect(jsonPath("$.lines[0].wholesale").value(true))
-                .andExpect(jsonPath("$.total").value(198))
+                .andExpect(jsonPath("$.lines[0].wholesale").value(false))
+                .andExpect(jsonPath("$.total").value(360))
                 .andReturn().getResponse().getContentAsString();
         Integer orderId = JsonPath.read(created, "$.id");
 
@@ -211,10 +211,9 @@ class CatalogApiIntegrationTest {
                 .andExpect(content().string(containsString("/img/top-marleny.jpeg")))
                 .andExpect(content().string(containsString("/img/opt/top-marleny-480.webp 480w")))
                 .andExpect(content().string(containsString("/img/opt/hero-960.webp 960w")))
-                .andExpect(content().string(containsString("Mayorista S/ 32 – 36 · desde 6 unid.")))
+                .andExpect(content().string(not(containsString("Mayorista"))))
                 .andExpect(content().string(containsString("\"@type\":\"ClothingStore\"")))
-                .andExpect(content().string(containsString("href=\"/?categoria=ninos#catalogo\"")))
-                .andExpect(content().string(containsString("S/ 16")));
+                .andExpect(content().string(containsString("href=\"/?categoria=ninos#catalogo\"")));
 
         mvc.perform(get("/").param("categoria", "ninos"))
                 .andExpect(status().isOk())

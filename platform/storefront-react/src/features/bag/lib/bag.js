@@ -48,9 +48,6 @@ function snapshot(product) {
     imageUrl: product.imageUrl ?? null,
     price: Number(product.price),
     priceMax: product.priceMax == null ? null : Number(product.priceMax),
-    wholesalePrice: product.wholesalePrice == null ? null : Number(product.wholesalePrice),
-    wholesalePriceMax: product.wholesalePriceMax == null ? null : Number(product.wholesalePriceMax),
-    wholesaleMinUnits: product.wholesaleMinUnits ?? 6,
   };
 }
 
@@ -84,24 +81,14 @@ export function syncWithCatalog(items, products) {
     .map((i) => ({ ...i, ...snapshot(byId.get(i.productId)), key: i.key, person: i.person, size: i.size, qty: i.qty }));
 }
 
-/**
- * Totals with the wholesale rule: when the SAME product adds up to wholesaleMinUnits or more
- * across the whole family, every unit of it uses the wholesale price.
- */
+/** Totals, and the lines grouped by person (every unit at the retail price). */
 export function summarize(items) {
-  const unitsByProduct = new Map();
-  for (const i of items) unitsByProduct.set(i.productId, (unitsByProduct.get(i.productId) ?? 0) + i.qty);
-
   let estimated = false;
   const lines = items.map((i) => {
-    const productUnits = unitsByProduct.get(i.productId);
-    const wholesale = i.wholesalePrice != null && productUnits >= i.wholesaleMinUnits;
-    const unitPrice = wholesale ? i.wholesalePrice : i.price;
     // Size-dependent price ranges: we charge the "from" price and say it's an estimate.
-    const priceIsRange = wholesale ? i.wholesalePriceMax != null && i.wholesalePriceMax !== i.wholesalePrice
-      : i.priceMax != null && i.priceMax !== i.price;
+    const priceIsRange = i.priceMax != null && i.priceMax !== i.price;
     if (priceIsRange) estimated = true;
-    return { ...i, wholesale, unitPrice, priceIsRange, subtotal: unitPrice * i.qty };
+    return { ...i, unitPrice: i.price, priceIsRange, subtotal: i.price * i.qty };
   });
 
   const byPerson = new Map();
@@ -110,24 +97,12 @@ export function summarize(items) {
     byPerson.get(line.person).push(line);
   }
 
-  // Nudge only when wholesale is close (at most 3 units away), not for every single garment.
-  const nudges = [];
-  const seen = new Set();
-  for (const line of lines) {
-    if (seen.has(line.productId) || line.wholesalePrice == null || line.wholesale) continue;
-    seen.add(line.productId);
-    const missing = line.wholesaleMinUnits - unitsByProduct.get(line.productId);
-    if (missing > 0 && missing <= 3) nudges.push({ productId: line.productId, name: line.name, missing });
-  }
-
   return {
     lines,
     byPerson,
     units: lines.reduce((sum, l) => sum + l.qty, 0),
     total: lines.reduce((sum, l) => sum + l.subtotal, 0),
     estimated,
-    wholesaleNames: [...new Set(lines.filter((l) => l.wholesale).map((l) => l.name))],
-    nudges,
   };
 }
 
@@ -139,7 +114,7 @@ export function whatsAppMessage(summary) {
     for (const l of lines) {
       const size = l.size === UNSURE_SIZE ? 'talla: asesórenme' : `talla ${l.size}`;
       const from = l.priceIsRange ? 'desde ' : '';
-      out.push(`- ${l.name} (${size}) x${l.qty}: ${from}${formatSoles(l.subtotal)}${l.wholesale ? ' (mayorista)' : ''}`);
+      out.push(`- ${l.name} (${size}) x${l.qty}: ${from}${formatSoles(l.subtotal)}`);
     }
     out.push('');
   }

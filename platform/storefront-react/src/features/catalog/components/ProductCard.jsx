@@ -12,8 +12,7 @@ const EASE_OUT = [0.22, 1, 0.36, 1];
  * On the same element Motion's inline transform would override the CSS hover and kill it.
  */
 function ProductCard({ product, apiBaseUrl, onOpen, index = 0, ref }) {
-  const { slug, name, categoryLabel, type, priceLabel, wholesaleLabel, wholesaleMinUnits, imageUrl, gallery, inStock } =
-    product;
+  const { slug, name, categoryLabel, type, priceLabel, imageUrl, gallery, inStock } = product;
   const titleId = `product-${slug}`;
   const handleOpen = () => onOpen(slug);
   const photoCount = (imageUrl ? 1 : 0) + (gallery?.length ?? 0);
@@ -78,12 +77,7 @@ function ProductCard({ product, apiBaseUrl, onOpen, index = 0, ref }) {
           <h3 id={titleId} className="font-display text-lg font-semibold leading-tight">
             {name}
           </h3>
-          <p className="text-base font-semibold">{priceLabel}</p>
-          {wholesaleLabel && (
-            <p className="mb-3 text-xs text-jx-muted">
-              Mayorista {wholesaleLabel} · desde {wholesaleMinUnits} unid.
-            </p>
-          )}
+          <p className="mb-3 text-base font-semibold">{priceLabel}</p>
           <m.button
             type="button"
             onClick={handleOpen}

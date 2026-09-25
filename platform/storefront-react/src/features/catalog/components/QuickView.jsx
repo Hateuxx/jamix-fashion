@@ -110,11 +110,6 @@ export default function QuickView({ product, apiBaseUrl, whatsappNumber, onClose
 
           <div>
             <p className="text-xl font-semibold">{product.priceLabel}</p>
-            {product.wholesaleLabel && (
-              <p className="text-sm text-jx-muted">
-                Mayorista {product.wholesaleLabel} desde {product.wholesaleMinUnits} unid. (sumando toda la familia)
-              </p>
-            )}
             {product.description && <p className="mt-3 text-sm leading-relaxed text-jx-charcoal-soft">{product.description}</p>}
           </div>
 

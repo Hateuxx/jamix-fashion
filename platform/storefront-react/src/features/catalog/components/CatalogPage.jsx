@@ -37,7 +37,7 @@ export default function CatalogPage({ apiBaseUrl = CATALOG_API_URL, whatsappNumb
         </h2>
         <p className="max-w-2xl text-sm text-jx-charcoal-soft">
           Elige cada prenda, para quién es y su talla. Al final envías el look completo en un solo WhatsApp, con el
-          precio mayorista aplicado si llegas a 6 unidades de una misma prenda.
+          total calculado.
         </p>
       </div>
 

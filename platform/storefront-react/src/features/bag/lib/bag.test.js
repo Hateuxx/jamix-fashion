@@ -7,11 +7,11 @@ import {
 } from './bag.js';
 
 const rita = { id: 2, slug: 'vestido-rita', name: 'Vestido Rita', category: 'ella', imageUrl: '/img/r.jpeg',
-  price: 45, priceMax: null, wholesalePrice: 33, wholesalePriceMax: null, wholesaleMinUnits: 6 };
+  price: 45, priceMax: null };
 const tunica = { id: 4, slug: 'vestido-tunica', name: 'Vestido Túnica', category: 'ninos', imageUrl: '/img/t.jpeg',
-  price: 50, priceMax: 60, wholesalePrice: 32, wholesalePriceMax: 36, wholesaleMinUnits: 6 };
+  price: 50, priceMax: 60 };
 const top = { id: 8, slug: 'top-naty', name: 'Top Naty', category: 'ella', imageUrl: null,
-  price: 29, priceMax: null, wholesalePrice: null, wholesalePriceMax: null, wholesaleMinUnits: 6 };
+  price: 29, priceMax: null };
 
 describe('bag', () => {
   it('merges the same product, person and size into one line', () => {
@@ -22,27 +22,20 @@ describe('bag', () => {
     assert.equal(items[0].qty, 3);
   });
 
-  it('applies wholesale when the same product reaches 6 units across the family', () => {
+  it('charges the retail price for every unit, even 6 or more of the same garment', () => {
     let items = addItem([], rita, { person: 'Mamá', size: 'M', qty: 3 });
-    items = addItem(items, rita, { person: 'Abuela', size: 'L', qty: 2 });
-    let s = summarize(items);
-    assert.equal(s.total, 5 * 45);
-    assert.deepEqual(s.nudges, [{ productId: 2, name: 'Vestido Rita', missing: 1 }]);
-
-    items = addItem(items, rita, { person: 'Hija', size: 'S', qty: 1 });
-    s = summarize(items);
-    assert.equal(s.total, 6 * 33);
-    assert.deepEqual(s.wholesaleNames, ['Vestido Rita']);
-    assert.equal(s.nudges.length, 0);
+    items = addItem(items, rita, { person: 'Abuela', size: 'L', qty: 3 });
+    // A bag saved before wholesale was removed still carries the old fields: they must be ignored.
+    items = items.map((i) => ({ ...i, wholesalePrice: 33, wholesaleMinUnits: 6 }));
+    assert.equal(summarize(items).total, 6 * 45);
   });
 
-  it('marks size-dependent prices as an estimate and ignores products without wholesale', () => {
+  it('marks size-dependent prices as an estimate', () => {
     let items = addItem([], tunica, { person: 'Hija', size: '8', qty: 1 });
     items = addItem(items, top, { person: 'Mamá', size: 'M', qty: 6 });
     const s = summarize(items);
     assert.equal(s.estimated, true);
     assert.equal(s.total, 50 + 6 * 29);
-    assert.equal(s.lines.find((l) => l.productId === 8).wholesale, false);
   });
 
   it('setQty to 0 removes the line; quantities are clamped', () => {
@@ -69,6 +62,7 @@ describe('bag', () => {
     assert.match(text, /\*Mamá\*\n- Vestido Rita \(talla M\) x1: S\/ 45/);
     assert.match(text, /\*Hija\*\n- Vestido Túnica \(talla: asesórenme\) x1: desde S\/ 50/);
     assert.match(text, /Total estimado: S\/ 95 \(2 prendas\)/);
+    assert.doesNotMatch(text, /mayorista/i);
   });
 
   it('only offers family members the garment fits', () => {

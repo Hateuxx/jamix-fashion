@@ -15,8 +15,6 @@ La arquitectura completa está en [platform/README.md](platform/README.md).
 
 - **Armar el look de toda la familia:** agrega prendas indicando para quién son (Mamá, Papá, Hija…) y la talla, y envía
   el pedido completo en **un solo WhatsApp**, con el total.
-- **Precio mayorista automático:** cuando una misma prenda suma 6 unidades entre toda la familia, se aplica el precio
-  mayorista. Si le faltan pocas unidades, la tienda se lo avisa.
 - **Buscar, filtrar y ordenar:** por categoría, tipo de prenda, disponibilidad y precio. La búsqueda ignora tildes y los
   filtros quedan en la URL, para compartirlos.
 - **Ficha rápida con galería:** fotos de modelo, espalda y detalle. Cada prenda tiene su enlace directo
