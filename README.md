@@ -105,6 +105,22 @@ npm run dev           # catálogo + BFF + tienda + admin
 cd platform && npm test
 ```
 
+GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)) corre las mismas pruebas y los builds en cada push
+y pull request. No necesita MySQL ni secretos.
+
+## Agregar o cambiar fotos
+
+Las páginas no muestran los JPEG originales sino versiones WebP de 480 y 960 px, unas 3 veces más livianas, que la
+tienda sirve desde el CDN de Vercel. Después de agregar o reemplazar una foto en
+`catalog-service/src/main/resources/static/img/`:
+
+```bash
+cd platform/catalog-service
+npm run images      # genera img/opt/<foto>-480.webp y -960.webp (solo las que cambiaron)
+```
+
+Sube también la carpeta `img/opt/`. Si te olvidas, las páginas muestran la foto original y el CI lo marca como error.
+
 ## Problemas comunes
 
 | Error | Causa y solución |
