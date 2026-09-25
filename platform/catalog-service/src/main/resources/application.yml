@@ -40,6 +40,16 @@ spring:
     problemdetails:
       enabled: true
 
+  web:
+    resources:
+      cache:
+        # Photos and CSS: browsers and CDNs reuse them for a day, then refresh in the background.
+        # File names aren't versioned, so a replaced photo shows up within a day at most.
+        cachecontrol:
+          max-age: 1d
+          stale-while-revalidate: 7d
+          cache-public: true
+
 server:
   port: ${PORT:8080}
   # Honour X-Forwarded-* from the gateway so redirects and links use the public host.

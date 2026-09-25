@@ -20,7 +20,8 @@
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap">
   <link rel="stylesheet" th:href="@{/css/app.css}">
-  <link rel="preload" as="image" th:href="@{/img/hero.jpg}" fetchpriority="high">
+  <link rel="preload" as="image" th:href="@{/img/hero.jpg}" fetchpriority="high" imagesizes="100vw"
+        th:attr="imagesrcset=|@{/img/opt/hero-480.webp} 480w, @{/img/opt/hero-960.webp} 960w, @{/img/hero.jpg} 1198w|">
 
   <script type="application/ld+json" th:utext="${jsonLd}"></script>
 </head>
@@ -54,7 +55,8 @@
 <main>
   <!-- ============ HERO ============ -->
   <section id="inicio" class="relative isolate flex min-h-[88svh] items-end overflow-hidden bg-jx-charcoal">
-    <img th:src="@{/img/hero.jpg}" alt="" fetchpriority="high" decoding="async"
+    <img th:src="@{/img/hero.jpg}" alt="" fetchpriority="high" decoding="async" sizes="100vw"
+         th:srcset="|@{/img/opt/hero-480.webp} 480w, @{/img/opt/hero-960.webp} 960w, @{/img/hero.jpg} 1198w|"
          class="absolute inset-0 -z-10 h-full w-full object-cover object-center opacity-80">
     <div class="absolute inset-0 -z-10 bg-gradient-to-t from-jx-charcoal via-jx-charcoal/45 to-transparent"></div>
 
@@ -122,6 +124,7 @@
           <article class="flex h-full flex-col" th:attr="aria-labelledby='p-' + ${p.slug()}">
             <div class="relative aspect-[3/4] overflow-hidden bg-jx-natural">
               <img th:if="${p.imageUrl() != null}" th:src="@{${p.imageUrl()}}" th:alt="${p.name()}"
+                   th:srcset="${photos.srcset(p.imageUrl())}" sizes="(min-width: 1024px) 18rem, 50vw"
                    loading="lazy" decoding="async" class="h-full w-full object-cover">
               <div th:if="${p.imageUrl() == null}"
                    class="flex h-full items-center justify-center p-4 text-center font-display text-lg text-jx-charcoal-soft">

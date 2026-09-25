@@ -8,10 +8,12 @@
     "test": "node scripts/mvnw.mjs test",
     "build": "node scripts/mvnw.mjs package",
     "build:css": "tailwindcss -i src/main/tailwind/app.css -o src/main/resources/static/css/app.css --minify",
-    "watch:css": "tailwindcss -i src/main/tailwind/app.css -o src/main/resources/static/css/app.css --watch"
+    "watch:css": "tailwindcss -i src/main/tailwind/app.css -o src/main/resources/static/css/app.css --watch",
+    "images": "node scripts/optimize-images.mjs"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.3.3"
   }
 }

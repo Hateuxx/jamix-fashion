@@ -26,11 +26,14 @@ public class StorefrontController {
     private final ProductService products;
     private final JamixProperties.Storefront storefront;
     private final JsonMapper jsonMapper;
+    private final PhotoSources photos;
 
-    public StorefrontController(ProductService products, JamixProperties properties, JsonMapper jsonMapper) {
+    public StorefrontController(ProductService products, JamixProperties properties, JsonMapper jsonMapper,
+            PhotoSources photos) {
         this.products = products;
         this.storefront = properties.storefront();
         this.jsonMapper = jsonMapper;
+        this.photos = photos;
     }
 
     @GetMapping("/")
@@ -41,6 +44,7 @@ public class StorefrontController {
         List<ProductResponse> catalog = products.catalog(active);
 
         model.addAttribute("products", catalog);
+        model.addAttribute("photos", photos);
         model.addAttribute("categories", Category.values());
         model.addAttribute("activeCategory", active.map(c -> c.slug()).orElse(null));
         model.addAttribute("whatsappNumber", storefront.whatsappNumber());

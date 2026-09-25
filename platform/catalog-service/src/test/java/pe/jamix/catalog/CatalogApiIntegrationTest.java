@@ -198,6 +198,8 @@ class CatalogApiIntegrationTest {
                 .andExpect(content().string(containsString("Vestimos el recuerdo que va a quedar colgado en tu sala")))
                 .andExpect(content().string(containsString("Vestido Rita")))
                 .andExpect(content().string(containsString("/img/top-marleny.jpeg")))
+                .andExpect(content().string(containsString("/img/opt/top-marleny-480.webp 480w")))
+                .andExpect(content().string(containsString("/img/opt/hero-960.webp 960w")))
                 .andExpect(content().string(containsString("Mayorista S/ 32 – 36 · desde 6 unid.")))
                 .andExpect(content().string(containsString("\"@type\":\"ClothingStore\"")))
                 .andExpect(content().string(containsString("href=\"/?categoria=ninos#catalogo\"")))
