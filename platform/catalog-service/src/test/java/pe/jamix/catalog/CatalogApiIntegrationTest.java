@@ -2,6 +2,7 @@ package pe.jamix.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -131,7 +132,7 @@ class CatalogApiIntegrationTest {
     void customerOrderMergesLinesAndAppliesWholesaleFromSixUnits() throws Exception {
         String token = login("cliente", "cliente123");
         // Vestido Rita (id 2): 3 + 3 units in separate lines = 6 -> wholesale S/ 33 each.
-        mvc.perform(post("/api/v1/orders").header(HttpHeaders.AUTHORIZATION, bearer(token))
+        String created = mvc.perform(post("/api/v1/orders").header(HttpHeaders.AUTHORIZATION, bearer(token))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"items\":[{\"productId\":2,\"quantity\":3},{\"productId\":2,\"quantity\":3}]}"))
                 .andExpect(status().isCreated())
@@ -139,11 +140,14 @@ class CatalogApiIntegrationTest {
                 .andExpect(jsonPath("$.lines", hasSize(1)))
                 .andExpect(jsonPath("$.lines[0].quantity").value(6))
                 .andExpect(jsonPath("$.lines[0].wholesale").value(true))
-                .andExpect(jsonPath("$.total").value(198));
+                .andExpect(jsonPath("$.total").value(198))
+                .andReturn().getResponse().getContentAsString();
+        Integer orderId = JsonPath.read(created, "$.id");
 
+        // Other test classes share this in-memory database and may have placed orders as "cliente" too.
         mvc.perform(get("/api/v1/orders/mine").header(HttpHeaders.AUTHORIZATION, bearer(token)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$[*].id", hasItem(orderId)));
     }
 
     @Test
