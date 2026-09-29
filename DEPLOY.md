@@ -41,7 +41,7 @@ El orden importa: **1. base de datos → 2. backend → 3. frontend → 4. conec
    | `JAMIX_ADMIN_PASSWORD` | La primera contraseña de `admin` (luego se cambia en el panel) |
    | `JAMIX_CUSTOMER_PASSWORD` | Contraseña del usuario de prueba `cliente` |
    | `JAMIX_JWT_SECRET` | Render la genera sola |
-   | Las URLs públicas | Las completas en el paso 4 |
+   | Las URLs públicas | Ya vienen en `render.yaml` (paso 4) |
 
 4. Al primer arranque, Flyway crea las tablas y carga el catálogo. Prueba:
    `https://jamix-catalog.onrender.com/api/v1/products`
@@ -73,7 +73,10 @@ Desde la web: **Vercel → Add New → Project → importa el repo**. Pon **Root
 
 ## 4. Conectar las URLs
 
-En **Render → jamix-catalog → Environment**:
+Las URLs públicas están en `render.yaml`, así que el Blueprint las aplica solo. Si cambias un dominio (por ejemplo,
+un dominio propio para la tienda), edítalo ahí y haz push: Render sincroniza el Blueprint y reinicia los servicios.
+
+**jamix-catalog**:
 
 | Variable | Ejemplo |
 |---|---|
@@ -82,14 +85,14 @@ En **Render → jamix-catalog → Environment**:
 | `JAMIX_SHOP_URL` | `https://jamix-tienda.vercel.app` |
 | `JAMIX_LEADS_URL` | `https://jamix-leads.onrender.com/api/leads` |
 
-En **Render → jamix-leads**:
+**jamix-leads**:
 
 | Variable | Ejemplo |
 |---|---|
 | `SITE_URL` | `https://jamix-catalog.onrender.com` |
 | `CORS_ORIGINS` | `https://jamix-catalog.onrender.com,https://jamix-tienda.vercel.app` |
 
-Guarda los cambios: Render reinicia los servicios. Si la tienda muestra "No pudimos cargar el catálogo", casi siempre
+Si la tienda muestra "No pudimos cargar el catálogo", casi siempre
 falta su dominio en `JAMIX_CORS_ORIGINS`.
 
 ## Probar la imagen Docker en tu equipo (opcional)

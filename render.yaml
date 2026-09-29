@@ -29,15 +29,15 @@ services:
         sync: false
       - key: JAMIX_CUSTOMER_PASSWORD
         sync: false
-      # Public URLs, filled in once Vercel and Render have assigned them.
+      # Public URLs assigned by Vercel and Render (not secrets, so they live here).
       - key: JAMIX_CORS_ORIGINS
-        sync: false
+        value: https://jamix-tienda.vercel.app,https://jamix-stock.vercel.app
       - key: JAMIX_SITE_URL
-        sync: false
+        value: https://jamix-catalog.onrender.com
       - key: JAMIX_SHOP_URL
-        sync: false
+        value: https://jamix-tienda.vercel.app
       - key: JAMIX_LEADS_URL
-        sync: false
+        value: https://jamix-leads.onrender.com/api/leads
 
   - type: web
     name: jamix-leads
@@ -53,6 +53,6 @@ services:
       - key: TRUST_PROXY
         value: "1"
       - key: SITE_URL
-        sync: false
+        value: https://jamix-catalog.onrender.com
       - key: CORS_ORIGINS
-        sync: false
+        value: https://jamix-catalog.onrender.com,https://jamix-tienda.vercel.app
